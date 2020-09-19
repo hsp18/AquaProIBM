@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Notifications </h1>
+    {% for msg in messages %}
+        {% include 'message.html' %}
+    {% endfor %}
+    {% if prev_url %}
+    <a href="{{ prev_url }}">Back</a>
+    {% endif %}
+    {% if next_url %}
+    <a href="{{ next_url }}">Forward</a>
+    {% endif %}
+{% endblock content %}
