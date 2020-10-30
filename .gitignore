@@ -2,7 +2,7 @@
 *idea
 .idea*
 __pycache__/
-flaskblog/__pycache__/
+flaskblog/__pycache__/*.*
 *.py[cod]
 *$py.class
 *.pyc

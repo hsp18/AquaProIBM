@@ -183,7 +183,7 @@ def notify():
         msg = Message(recipient=user,body=request.form['msg_from_rpi'])
         db.session.add(msg)
         db.session.commit()
-        return {"msg":"Message sent successfully"}
+        return "Message sent successfully"
 
     if request.method =='GET':
         return current_user.new_messages();

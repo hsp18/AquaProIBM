@@ -38,7 +38,11 @@ current_sensors = {
     }
 
 model = load_model('./flaskblog/static/modelforui.h5')
-graph = tf.get_default_graph()
+
+''' with repect to following warning "tf.get_default_graph()" is changed to "tf.compat.v1.get_default_graph()" '''
+#WARNING:tensorflow:From /Aqua-Pro-IBM/flaskblog/__init__.py:41: The name tf.get_default_graph is deprecated. Please use tf.compat.v1.get_default_graph instead.
+
+graph = tf.compat.v1.get_default_graph()
 #from flaskblog import routes
 
 #def checkleak(data):
