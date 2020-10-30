@@ -62,6 +62,7 @@ def detectCrack():
     if np.amax(skel)>0:
         pload = {"msg_from_rpi" : "Crack Detected"}
         r = requests.post("http://localhost:5000/notify/" + usermail,data=pload)
+        #http://ip172-18-0-56-budsnbhqckh000fp2g7g-5000.direct.labs.play-with-docker.com/login
         print("Crack Found")
         print(r)
 
