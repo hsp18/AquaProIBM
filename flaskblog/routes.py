@@ -170,16 +170,23 @@ def graphs():
     return render_template('graphs.html',title='Graphs',msg=message)
 
 
-@app.route('/notify/<recipient>' , methods=['POST'])
-def notify(recipient):
+@app.route('/notify' , methods=['GET','POST'])
+def notify():
 
-    user = User.query.filter_by(email=recipient).first_or_404()
-    print("Crack Detected")
-    msg = Message(recipient=user,body=request.form['msg_from_rpi'])
-    db.session.add(msg)
-    db.session.commit()
-    
-    return {"msg":"Message sent successfully"}
+    recipient = request.args.get('recipient', 0, type=str)
+    if recipient=="0":
+        return "error"
+
+    if request.method =='POST':
+        user = User.query.filter_by(email=recipient).first_or_404()
+        print("Crack Detected")
+        msg = Message(recipient=user,body=request.form['msg_from_rpi'])
+        db.session.add(msg)
+        db.session.commit()
+        return {"msg":"Message sent successfully"}
+
+    if request.method =='GET':
+        return current_user.new_messages();
 
 @app.route('/notifications', methods=['GET'])
 def notifications():
