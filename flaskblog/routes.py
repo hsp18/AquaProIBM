@@ -1,7 +1,7 @@
 import os
 import secrets
 from PIL import Image
-from flask import render_template, url_for, flash, redirect, request, Response
+from flask import render_template, url_for, flash, redirect, request, Response, jsonify
 from flaskblog import app, db, bcrypt, changes, current_sensors, locateleak
 from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm
 from flaskblog.models import User, Post, Algorithms, Message
@@ -186,14 +186,15 @@ def notify():
         return "Message sent successfully"
 
     if request.method =='GET':
-        return current_user.new_messages();
+        messg = { "count" : current_user.new_messages() }
+        return jsonify(messg);
 
 @app.route('/notifications', methods=['GET'])
 def notifications():
     current_user.last_message_read_time = datetime.utcnow()
     db.session.commit()
     page = request.args.get('page', 1, type=int)
-    messages = current_user.messages_received.order_by(Message.timestamp.desc()).paginate(page,2, False)
+    messages = current_user.messages_received.order_by(Message.timestamp.desc()).paginate(page,3, False)
     next_url = url_for('notifications', page=messages.next_num) if messages.has_next else None
     prev_url = url_for('notifications', page=messages.prev_num) if messages.has_prev else None
     return render_template('notifications.html', messages=messages.items,next_url=next_url, prev_url=prev_url)

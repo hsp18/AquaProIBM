@@ -67,28 +67,35 @@
                   </button>
               </div>
               {% endfor %}
-              {% block content %}{% endblock %}
+              
 	     
 	      {% block scripts %}
-    		<script src="https://code.jquery.com/jquery-3.1.1.min.js" >
+    		<script >
         		function set_message_count(n) {
 					$('#message_count').text(n);
 					$('#message_count').css('visibility', n ? 'visible' : 'hidden');
 			}
-			{% if current_user.is_authenticated %}
-        			$(function() {
-            				setInterval(function() {
-						$.ajax('{{ url_for('notify') }}').done(
-                    					function(n) {
-								console.log("Success");
-                                				set_message_count(n);
-                    					}
-                			);
-                        		}, 10000);
-        		});
+			
+			{% if current_user.is_authenticated %}  			
+        		async function longpoll(){
+        			setInterval( function() {
+        				fetch('/notify').then(function (response) {
+        					return response.json();
+        				}).then(function (text) {
+        					set_message_count(text.count);
+        					console.log('GET response:');
+        					console.log(text.count);
+        				});
+        			},1000);
+        		}
+        		longpoll();
         		{% endif %}
     		</script>
 	      {% endblock %}
+	      
+	      {% block content %}{% endblock %}
+	      
+	      
           </div>
         <div class="col-md-4">
           <div class="content-section">
